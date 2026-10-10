@@ -45,6 +45,7 @@ export const careersRouter = Router().post('/', upload.single('resume'), async (
   await deliver({
     to: config.recipients.careers,
     subject: `Job application: ${data.role}, ${data.name}`,
+    label: 'CAREERS',
     heading: `New application for ${data.role}`,
     fields,
     data,

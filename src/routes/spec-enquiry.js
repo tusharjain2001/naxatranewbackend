@@ -21,6 +21,7 @@ export const specEnquiryRouter = Router().post('/', async (req, res) => {
   await deliver({
     to: config.recipients.specEnquiry,
     subject: `New motor spec enquiry: ${data.name}, ${data.company}`,
+    label: 'SPEC ENQUIRY',
     heading: 'New motor spec enquiry from the website',
     fields,
     data,

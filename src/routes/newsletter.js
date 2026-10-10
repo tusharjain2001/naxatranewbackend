@@ -17,6 +17,7 @@ export const newsletterRouter = Router().post('/', async (req, res) => {
   await deliver({
     to: config.recipients.newsletter,
     subject: `New newsletter subscriber: ${data.email}`,
+    label: 'NEWSLETTER',
     heading: 'New newsletter subscriber',
     fields,
     data,

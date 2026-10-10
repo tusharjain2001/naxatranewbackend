@@ -24,14 +24,14 @@ export const contactRouter = Router().post('/', async (req, res) => {
   await deliver({
     to,
     subject: `New ${KIND[data.topic]} enquiry: ${data.name}, ${data.company}`,
+    label: 'CONTACT FORM',
     heading: `New ${KIND[data.topic]} enquiry from the website`,
     fields,
     data,
     confirmation: {
       subject: 'We’ve received your enquiry | Naxatra Labs',
-      heading: 'Thanks for getting in touch',
-      message: 'We’ve received your enquiry and someone from our team will get back to you shortly.',
-      fields,
+      message:
+        'Thank you for reaching out to Naxatra Labs.\nWe’ve received your inquiry and our team will get back to you shortly. We appreciate your interest in our work and look forward to connecting with you.',
     },
   })
   res.json({ ok: true, message: 'Thank you! We’ve received your enquiry and sent a confirmation to your email.' })
