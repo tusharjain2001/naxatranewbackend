@@ -1,0 +1,22 @@
+{
+  "name": "naxatranew-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Form APIs for the Naxatra Labs website: each form is emailed to its own team inbox and the sender gets a confirmation.",
+  "type": "module",
+  "main": "src/app.js",
+  "engines": {
+    "node": ">=22.9"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env src/server.js",
+    "dev": "node --env-file-if-exists=.env --watch src/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.1",
+    "multer": "^2.4.0",
+    "nodemailer": "^10.0.15"
+  }
+}
