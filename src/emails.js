@@ -1,6 +1,9 @@
 // Email templates: one for the team inbox (every submitted field) and one confirmation for the sender.
 // Plain table layout with inline styles so it renders the same in Gmail, Outlook and phones.
+// Brand wrapper v1 (T174): Naxatra blue + teal accent, wordmark header, full-brand footer.
+// Image-free on purpose — SVG/remote logos are blocked by Gmail/Outlook until "load images".
 const BLUE = '#1863DA'
+const TEAL = '#4DD6C4'
 
 const escape = (value) =>
   String(value).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c])
@@ -12,14 +15,20 @@ function layout({ heading, body }) {
 <html><body style="margin:0;padding:0;background:#f4f5f7;font-family:Helvetica,Arial,sans-serif;color:#000">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f5f7;padding:24px 12px">
   <tr><td align="center">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:8px;overflow:hidden">
-      <tr><td style="background:#000;padding:20px 28px;color:#fff;font-size:20px;font-weight:bold">Naxatra Labs</td></tr>
-      <tr><td style="padding:28px">
-        <h1 style="margin:0 0 16px;font-size:22px;font-weight:normal">${escape(heading)}</h1>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08)">
+      <tr><td style="background:#000;padding:22px 28px;color:#fff;font-size:20px;font-weight:bold;letter-spacing:0.14em">NAXATRA <span style="color:${TEAL}">LABS</span></td></tr>
+      <tr><td style="height:4px;background:${TEAL};font-size:0;line-height:0">&nbsp;</td></tr>
+      <tr><td style="padding:32px 28px">
+        <h1 style="margin:0 0 16px;font-size:22px;font-weight:normal;color:#111">${escape(heading)}</h1>
         ${body}
       </td></tr>
-      <tr><td style="padding:16px 28px;background:#fafafa;color:#515151;font-size:12px">
-        Naxatra Labs · Sector 44, Gurugram, Haryana 122003 · <a href="https://naxatralabs.com" style="color:${BLUE}">naxatralabs.com</a>
+      <tr><td style="padding:22px 28px;background:#0b0b0b;color:#9a9a9a;font-size:12px;line-height:20px">
+        <span style="color:#fff;font-weight:bold;letter-spacing:0.1em">NAXATRA LABS</span><br>
+        Corporate Office · Sector 44, Gurugram, Haryana 122003<br>
+        Manufacturing · Paldi-Kankaj, Dakroi, Ahmedabad, Gujarat 382425<br>
+        <a href="mailto:enquiry@naxatralabs.com" style="color:${TEAL};text-decoration:none">enquiry@naxatralabs.com</a>
+        &nbsp;·&nbsp; +91 92660 30266
+        &nbsp;·&nbsp; <a href="https://naxatralabs.com" style="color:${TEAL};text-decoration:none">naxatralabs.com</a>
       </td></tr>
     </table>
   </td></tr>
