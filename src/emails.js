@@ -1,6 +1,7 @@
 // Email templates: one for the team inbox (every submitted field) and one confirmation for the sender.
-// The confirmation uses the dark, image-led wrapper from the approved Figma design (node 15835:16625); the
-// team's copy has no design, so it's a plain light email (see teamEmail).
+// Both use a CLEAN LIGHT body under a DARK branded header (logo/tagline/label/socials over the hero image).
+// Light body because Gmail's iOS/Android apps mangle force-dark emails (white text turns invisible) but
+// invert a proper light email into a clean, readable dark one — so this renders right in every client.
 // Table layout + inline styles so it renders the same in Gmail, Outlook and on phones.
 //
 // Per-form variables: `label` (header tag, e.g. "CONTACT FORM"), the greeting name, and the body copy.
@@ -8,8 +9,9 @@
 // local refs). Override the host with EMAIL_ASSET_BASE; it defaults to the live site.
 const ASSET_BASE = (process.env.EMAIL_ASSET_BASE || 'https://www.naxatralabs.com/email-assets').replace(/\/+$/, '')
 const FONT = "'Helvetica Neue', Helvetica, Arial, sans-serif"
-const GRAY = '#999999'
-const LABEL_COLOR = 'rgba(255,255,255,0.65)'
+const GRAY = '#6b7280' // muted text (sign-off tagline), legible on the light body
+const INK = '#1a1a1a' // primary text on the light body
+const LABEL_COLOR = 'rgba(255,255,255,0.65)' // the per-form label; sits on the dark header image
 
 // Same profiles as the website footer.
 const SOCIALS = [
@@ -67,8 +69,6 @@ function layout({ label, body }) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="dark light">
-<meta name="supported-color-schemes" content="dark light">
 <style>
   @media only screen and (max-width: 480px) {
     .nx-pad { padding-left: 18px !important; padding-right: 18px !important; }
@@ -77,13 +77,13 @@ function layout({ label, body }) {
   }
 </style>
 </head>
-<body style="margin:0;padding:0;background:#000000;font-family:${FONT};color:#ffffff">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#000000" style="background:#000000">
-  <tr><td align="center" style="padding:0">
+<body style="margin:0;padding:0;background:#f4f4f5;font-family:${FONT};color:${INK}">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#f4f4f5" style="background:#f4f4f5">
+  <tr><td align="center" style="padding:24px 12px">
     <!--[if mso]><table role="presentation" width="600" cellpadding="0" cellspacing="0"><tr><td><![endif]-->
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#000000" style="width:100%;max-width:600px;background:#000000">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="width:100%;max-width:600px;background:#ffffff;border:1px solid #e6e6e6;border-radius:8px;overflow:hidden">
       ${header(label)}
-      <tr><td class="nx-pad" bgcolor="#000000" style="background:#000000;padding:34px 28px 40px 28px;font-family:${FONT};color:#ffffff">
+      <tr><td class="nx-pad" bgcolor="#ffffff" style="background:#ffffff;padding:34px 28px 40px 28px;font-family:${FONT};color:${INK}">
         ${body}
       </td></tr>
     </table>
@@ -170,11 +170,11 @@ export function confirmationEmail({ label, name, message }) {
   return {
     html: layout({
       label,
-      body: `<p style="margin:0 0 20px;font-family:${FONT};font-weight:300;font-size:16px;line-height:26px;color:#ffffff">${escape(greeting)}</p>
-        <p style="margin:0 0 28px;font-family:${FONT};font-weight:300;font-size:16px;line-height:26px;color:#ffffff">${html(message)}</p>
-        <p style="margin:0;font-family:${FONT};font-weight:300;font-size:16px;line-height:26px;color:#ffffff">Best Regards,</p>
-        <p style="margin:6px 0 0;font-family:${FONT};font-size:16px;line-height:24px;color:#ffffff">Team Naxatra Labs</p>
-        <p style="margin:2px 0 0;font-family:${FONT};font-size:14px;line-height:22px;color:${GRAY}">Engineering the future of motion.</p>`,
+      body: `<p style="margin:0 0 20px;font-family:${FONT};font-size:16px;line-height:26px;color:${INK}">${escape(greeting)}</p>
+        <p style="margin:0 0 30px;font-family:${FONT};font-size:16px;line-height:26px;color:${INK}">${html(message)}</p>
+        <p style="margin:0;font-family:${FONT};font-size:16px;line-height:26px;color:${INK}">Best Regards,</p>
+        <p style="margin:8px 0 0;font-family:${FONT};font-weight:700;font-size:16px;line-height:24px;color:${INK}">Team Naxatra Labs</p>
+        <p style="margin:3px 0 0;font-family:${FONT};font-size:14px;line-height:22px;color:${GRAY}">Engineering the future of motion.</p>`,
     }),
     text: `${greeting}\n\n${message}\n\nBest Regards,\nTeam Naxatra Labs\nEngineering the future of motion.`,
   }
