@@ -24,7 +24,8 @@ export const contactRouter = Router().post('/', async (req, res) => {
   await deliver({
     to,
     subject: `New ${KIND[data.topic]} enquiry: ${data.name}, ${data.company}`,
-    label: 'CONTACT FORM',
+    // The header tag names the chosen tab (Motors Enquiry / Investment / Partnership / Others).
+    label: data.topic.toUpperCase(),
     heading: `New ${KIND[data.topic]} enquiry from the website`,
     fields,
     data,
