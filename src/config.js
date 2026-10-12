@@ -22,6 +22,8 @@ const recipients = {
   },
   careers: list(env.CAREERS_TO),
   specEnquiry: list(env.SPEC_ENQUIRY_TO),
+  // Data-sheet requests from the motor pages; left blank, they go to the spec-enquiry inbox.
+  datasheet: list(env.DATASHEET_TO),
   newsletter: list(env.NEWSLETTER_TO),
 }
 
@@ -71,3 +73,4 @@ if (missing.length) {
   const fallback = ['team@naxatralabs.test']
   for (const key of ['contact', 'careers', 'specEnquiry', 'newsletter']) if (!recipients[key].length) recipients[key] = fallback
 }
+if (!recipients.datasheet.length) recipients.datasheet = recipients.specEnquiry

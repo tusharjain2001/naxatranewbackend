@@ -8,6 +8,7 @@ import { config } from './config.js'
 import { ValidationError } from './validate.js'
 import { careersRouter, MAX_RESUME_MB } from './routes/careers.js'
 import { contactRouter } from './routes/contact.js'
+import { datasheetRouter } from './routes/datasheet.js'
 import { newsletterRouter } from './routes/newsletter.js'
 import { specEnquiryRouter } from './routes/spec-enquiry.js'
 
@@ -34,6 +35,7 @@ const limited = () =>
 app.use('/api/contact', limited(), contactRouter)
 app.use('/api/spec-enquiry', limited(), specEnquiryRouter)
 app.use('/api/careers', limited(), careersRouter)
+app.use('/api/datasheet', limited(), datasheetRouter)
 app.use('/api/newsletter', limited(), newsletterRouter)
 
 app.use((req, res) => res.status(404).json({ ok: false, message: 'Not found.' }))
