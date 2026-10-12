@@ -50,15 +50,20 @@ export const config = {
   rateLimit: Number(env.RATE_LIMIT) || 10,
 }
 
-// Production must be fully configured; development fills the gaps so it runs out of the box.
+// Production must have mail and every inbox configured; development fills the gaps so it runs out of the box.
 const missing = [
   !config.smtp && 'SMTP_HOST',
   !recipients.contact.length && 'CONTACT_TO',
   !recipients.careers.length && 'CAREERS_TO',
   !recipients.specEnquiry.length && 'SPEC_ENQUIRY_TO',
   !recipients.newsletter.length && 'NEWSLETTER_TO',
-  !config.recaptchaSecret && 'RECAPTCHA_SECRET',
 ].filter(Boolean)
+
+// reCAPTCHA only guards the newsletter, so a missing secret doesn't stop the other forms: in production the
+// newsletter is switched off until RECAPTCHA_SECRET is set (see recaptcha.js); in development it's skipped.
+if (!config.recaptchaSecret) {
+  console.warn(`[config] RECAPTCHA_SECRET is not set: ${isProd ? 'the newsletter sign-up is off until it is' : 'captcha checks are skipped'}.`)
+}
 
 if (missing.length) {
   if (isProd) throw new Error(`Missing required environment variables: ${missing.join(', ')}`)

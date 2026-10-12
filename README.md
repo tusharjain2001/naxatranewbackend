@@ -42,7 +42,9 @@ The project is ready for Vercel as is:
 1. **Push this folder to its own Git repo.** Import it in Vercel as a new project. Leave the framework preset as **Other**, with no build command and no output directory.
 2. **Add the environment variables.** In Project Settings → Environment Variables, enter everything from `.env.example`.
    - Vercel sets `NODE_ENV=production` itself.
-   - Without SMTP, all four team addresses and `RECAPTCHA_SECRET`, the function refuses to run, and every form returns an error.
+   - Without SMTP and all four team addresses, the function refuses to run, and every form returns an error.
+   - Without `RECAPTCHA_SECRET`, the contact, spec and careers forms still work; only the newsletter sign-up is refused until it is set.
+   - Set `EMAIL_ASSET_BASE` to the website's address plus `/email-assets`, so the email images load.
    - `TRUST_PROXY` isn't needed on Vercel.
 3. **Deploy.** Check `https://<backend>.vercel.app/api/health`; it should return `{"ok":true}`.
 4. **Point the website at the backend.** In the **website's** Vercel project, set `VITE_API_URL=https://<backend>.vercel.app` (or your custom domain, e.g. `https://api.naxatralabs.com`) and redeploy the website.

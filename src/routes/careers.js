@@ -51,11 +51,11 @@ export const careersRouter = Router().post('/', upload.single('resume'), async (
     data,
     note: `Resume attached: ${safeName(req.file.originalname)}`,
     attachments: [{ filename: safeName(req.file.originalname), content: req.file.buffer, contentType: req.file.mimetype }],
+    // Approved Figma design "[Approved] Emailer - career" (node 15908:146).
     confirmation: {
       subject: 'We’ve received your application | Naxatra Labs',
-      heading: 'Thanks for applying',
-      message: `Thank you for applying for the ${data.role} role at Naxatra Labs. Our team will review your application and contact you if your profile is a good fit.`,
-      fields,
+      message:
+        'Thank you for reaching out to Naxatra Labs.\nWe’ve received your application details and our team will get back to you shortly. We truly appreciate your interest in working with us and look forward to connecting with you.',
     },
   })
   res.json({ ok: true, message: 'Thank you! Your application has been sent. We’ve emailed you a confirmation.' })

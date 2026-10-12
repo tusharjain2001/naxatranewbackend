@@ -47,6 +47,7 @@ app.use((err, req, res, next) => {
     return res.status(400).json({ ok: false, message })
   }
   if (err.type === 'entity.too.large' || err.type === 'entity.parse.failed') return res.status(400).json({ ok: false, message: 'Invalid request.' })
+  if (err.expose) return res.status(err.status ?? 400).json({ ok: false, message: err.message })
   console.error(`[error] ${req.method} ${req.originalUrl}:`, err)
   res.status(500).json({ ok: false, message: 'Something went wrong on our side. Please try again, or email us directly.' })
 })

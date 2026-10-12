@@ -3,9 +3,16 @@ import { ValidationError } from './validate.js'
 
 let warned = false
 
-// Checks a reCAPTCHA v2 token with Google. Without RECAPTCHA_SECRET (development only) the check is skipped.
+// Checks a reCAPTCHA v2 token with Google. Without RECAPTCHA_SECRET the check is skipped in development, and in
+// production the sign-up is refused (an unguarded form would let bots send welcome emails to anyone).
 export async function verifyRecaptcha(token, ip) {
   if (!config.recaptchaSecret) {
+    if (config.isProd) {
+      const err = new Error('Newsletter sign-up isn’t available right now. Please try again later.')
+      err.status = 503
+      err.expose = true
+      throw err
+    }
     if (!warned) console.warn('[recaptcha] RECAPTCHA_SECRET is not set; skipping captcha checks.')
     warned = true
     return
