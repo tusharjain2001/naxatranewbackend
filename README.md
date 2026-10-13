@@ -13,7 +13,7 @@ The data-sheet form is the exception to point 2: the visitor's email carries the
 
 | Endpoint | Website form | Body | Team inbox (env) |
 |---|---|---|---|
-| `POST /api/contact` | Contact page enquiry (4 topic tabs) | JSON: `topic`, `name`, `email`, `company`, `application?`, `message?` | `CONTACT_TO` (or a per-topic `CONTACT_*_TO`) |
+| `POST /api/contact` | Contact page enquiry (4 topic tabs) | JSON: `topic`, `name`, `email`, `company` (required for Motors Enquiry only), `application?` (the tab's dropdown: application / investment / partnership / enquiry type), `message?`. Each tab's labels and dropdown lists are in `src/routes/contact.js`. | `CONTACT_TO` (or a per-topic `CONTACT_*_TO`) |
 | `POST /api/spec-enquiry` | "Share your application spec" on industry, Drone and Products pages | JSON: `name`, `email`, `company`, `application?`, `message?`, `page?` | `SPEC_ENQUIRY_TO` |
 | `POST /api/datasheet` | "Request data-sheet" on each motor page | JSON: `firstName`, `lastName`, `company`, `email`, `motor` (one of the motors in `src/datasheets.js`), `page?` | `DATASHEET_TO` (falls back to `SPEC_ENQUIRY_TO`) |
 | `POST /api/careers` | Careers application | multipart: `name`, `email`, `phone?`, `company?`, `role`, `linkedin` (https URL), `resume` (PDF/DOC/DOCX, max 4 MB — Vercel's request limit is 4.5 MB) | `CAREERS_TO` (resume attached) |
