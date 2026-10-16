@@ -3,6 +3,7 @@ import { Router } from 'express'
 import multer from 'multer'
 import { config } from '../config.js'
 import { deliver } from '../deliver.js'
+import { TABS } from '../sheets.js'
 import { read, ValidationError } from '../validate.js'
 
 // POST /api/careers — the job application form (multipart, with the resume as `resume`).
@@ -41,6 +42,7 @@ const safeName = (name) => name.replace(/[^\w.\- ()]+/g, '_').slice(-120)
 export const careersRouter = Router().post('/', upload.single('resume'), async (req, res) => {
   const data = read(req.body, fields)
   if (!req.file) throw new ValidationError({ resume: 'Please attach your resume.' })
+  const resume = { filename: safeName(req.file.originalname), content: req.file.buffer, contentType: req.file.mimetype }
 
   await deliver({
     to: config.recipients.careers,
@@ -49,8 +51,10 @@ export const careersRouter = Router().post('/', upload.single('resume'), async (
     heading: `New application for ${data.role}`,
     fields,
     data,
-    note: `Resume attached: ${safeName(req.file.originalname)}`,
-    attachments: [{ filename: safeName(req.file.originalname), content: req.file.buffer, contentType: req.file.mimetype }],
+    note: `Resume attached: ${resume.filename}`,
+    attachments: [resume],
+    // The resume goes to the Drive folder, with its link in the row.
+    record: { tab: TABS.careers, files: [resume] },
     // Approved Figma design "[Approved] Emailer - career" (node 15908:146).
     confirmation: {
       subject: 'We’ve received your application | Naxatra Labs',

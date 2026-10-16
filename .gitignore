@@ -2,4 +2,7 @@ node_modules
 .env
 .env.*
 !.env.example
+# Google service-account keys
+*service-account*.json
+google-*.json
 *.log

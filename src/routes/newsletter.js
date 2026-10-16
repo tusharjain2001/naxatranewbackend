@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { config } from '../config.js'
 import { deliver } from '../deliver.js'
+import { TABS } from '../sheets.js'
 import { verifyRecaptcha } from '../recaptcha.js'
 import { read } from '../validate.js'
 
@@ -21,6 +22,7 @@ export const newsletterRouter = Router().post('/', async (req, res) => {
     heading: 'New newsletter subscriber',
     fields,
     data,
+    record: { tab: TABS.newsletter },
     confirmation: {
       subject: 'You’re subscribed to the Naxatra Labs newsletter',
       heading: 'Welcome aboard',

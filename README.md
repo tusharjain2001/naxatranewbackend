@@ -25,6 +25,28 @@ Responses:
 - An invalid form returns `400 { "ok": false, "message": "…", "errors": { field: "…" } }`.
 - Each form allows 10 submissions per IP every 15 minutes (`RATE_LIMIT`).
 
+## Google Sheet + Drive record (optional)
+
+Next to the emails, every submission can also be saved as a row in one shared Google Sheet. Careers resumes are uploaded to a shared Drive folder, and their link goes in the row. This is set up in `src/sheets.js`.
+
+- **One tab per form:** Motors Enquiry, Investment, Partnership, Others (the Contact page tabs), Spec Enquiry, Data-sheet Requests, Careers, Newsletter. A tab and its header row are created the first time that form is used.
+- **Columns:** the time (IST) first, then the form's fields in a fixed order, then the Drive link (Careers only).
+- **It never breaks a submission.** If Google is down or misconfigured, the error is logged as `[sheets] …` and the visitor still gets their success message and emails.
+- **Files aren't made public.** Only people the Drive folder is shared with can open them.
+- **Text stays text.** Values that start with `=`, `+`, `-` or `@` (phone numbers, or someone typing a formula) are saved as plain text.
+
+**One-time setup:**
+1. In Google Cloud, create or reuse a project and enable the **Google Sheets API** and **Google Drive API**.
+2. Create a **service account** (IAM & Admin → Service Accounts) and download its **JSON key**. Keep it out of git.
+3. Create the Google Sheet. The tabs are added automatically.
+4. Create the uploads folder **inside a Shared Drive** (Google Workspace). A service account has no storage of its own, so uploads into a normal "My Drive" folder fail with a storage-quota error.
+5. **Share both with the service account's email** (the `client_email` in the JSON):
+   - the Sheet as **Editor**;
+   - the Shared Drive (or the folder) as **Content manager**.
+
+   Without this, every write fails with 403.
+6. Set `GOOGLE_SERVICE_ACCOUNT_JSON` (the JSON text, or the path to the key file), `NAXATRA_SHEET_ID` and `NAXATRA_DRIVE_FOLDER_ID`, then restart. On start the server logs `[sheets] Recording submissions to sheet …`.
+
 ## Run it locally
 
 ```bash
@@ -83,6 +105,7 @@ src/validate.js          field validation
 src/recaptcha.js         Google reCAPTCHA check
 src/routes/*.js          one file per form: fields, recipients, email wording
 src/datasheets.js        motor -> data-sheet PDF map (and the motors the data-sheet form accepts)
+src/sheets.js            optional Google Sheet row + Drive upload for every submission
 datasheets/              the data-sheet PDFs (bundled into the Vercel function via vercel.json)
 ```
 

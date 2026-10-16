@@ -48,6 +48,12 @@ export const config = {
   from: env.MAIL_FROM || 'Naxatra Labs <no-reply@naxatralabs.com>',
   recipients,
   recaptchaSecret: env.RECAPTCHA_SECRET || '',
+  // Optional: also record every submission in a Google Sheet, with attachments in a Drive folder (see sheets.js).
+  google: {
+    serviceAccount: env.GOOGLE_SERVICE_ACCOUNT_JSON || '',
+    sheetId: env.NAXATRA_SHEET_ID || '',
+    driveFolderId: env.NAXATRA_DRIVE_FOLDER_ID || '',
+  },
   // Submissions allowed per IP per form in each 15-minute window.
   rateLimit: Number(env.RATE_LIMIT) || 10,
 }

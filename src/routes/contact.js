@@ -65,6 +65,8 @@ export const contactRouter = Router().post('/', async (req, res) => {
     heading: `New ${form.kind} enquiry from the website`,
     fields,
     data,
+    // The Sheet has a tab per Contact tab (Motors Enquiry, Investment, Partnership, Others).
+    record: { tab: topic },
     confirmation: {
       subject: 'We’ve received your enquiry | Naxatra Labs',
       message:

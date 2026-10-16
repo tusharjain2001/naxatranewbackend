@@ -3,6 +3,7 @@ import { config } from '../config.js'
 import { datasheetFor, MOTORS } from '../datasheets.js'
 import { confirmationEmail, teamEmail } from '../emails.js'
 import { sendMail } from '../mailer.js'
+import { recordSubmission, TABS } from '../sheets.js'
 import { read } from '../validate.js'
 
 // POST /api/datasheet — the "Request data-sheet" form on each motor page. `motor` names the motor the visitor
@@ -31,6 +32,12 @@ export const datasheetRouter = Router().post('/', async (req, res) => {
   const visitor = { name, address: data.email }
   const sheet = await datasheetFor(data.motor)
   const label = 'DATA-SHEET'
+  // Recorded in the Sheet alongside the emails (never fails the request).
+  const recording = recordSubmission({
+    tab: TABS.datasheet,
+    fields: { ...teamFields, sent: { label: 'Data-sheet emailed' } },
+    data: { ...data, name, sent: sheet ? sheet.filename : 'No (none on file yet)' },
+  })
 
   const visitorMail = () =>
     sendMail({
@@ -67,11 +74,15 @@ export const datasheetRouter = Router().post('/', async (req, res) => {
   // When there's a sheet, it's what the visitor asked for, so their email must go through and the team copy is
   // only logged on failure. Without one, the team email is the request itself, so that one must go through.
   const [first, second] = sheet ? [visitorMail, teamMail] : [teamMail, visitorMail]
-  await first()
   try {
-    await second()
-  } catch (err) {
-    console.error(`[mail] Data-sheet ${sheet ? 'team copy' : 'confirmation'} for ${data.email} failed: ${err.message}`)
+    await first()
+    try {
+      await second()
+    } catch (err) {
+      console.error(`[mail] Data-sheet ${sheet ? 'team copy' : 'confirmation'} for ${data.email} failed: ${err.message}`)
+    }
+  } finally {
+    await recording
   }
 
   res.json({

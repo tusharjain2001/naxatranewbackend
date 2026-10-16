@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { config } from '../config.js'
 import { deliver } from '../deliver.js'
+import { TABS } from '../sheets.js'
 import { read } from '../validate.js'
 
 // POST /api/spec-enquiry — the "Share your specs" form on the industry, Drone and Products pages.
@@ -25,6 +26,7 @@ export const specEnquiryRouter = Router().post('/', async (req, res) => {
     heading: 'New motor spec enquiry from the website',
     fields,
     data,
+    record: { tab: TABS.specEnquiry },
     confirmation: {
       subject: 'We’ve received your requirements | Naxatra Labs',
       heading: 'Thanks for sharing your requirements',
